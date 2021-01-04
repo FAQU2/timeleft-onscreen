@@ -14,7 +14,7 @@ public Plugin myinfo =
 
 public void OnMapStart()
 {
-	hTimer = CreateTimer(1.00, Timer_Timeleft, _, TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE);
+	hTimer = CreateTimer(1.00, Timer_Timeleft, _, TIMER_REPEAT);
 }
 
 public void OnMapEnd()
