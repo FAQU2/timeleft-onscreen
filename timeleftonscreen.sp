@@ -4,31 +4,18 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-Handle Timers[MAXPLAYERS + 1];
-
 public Plugin myinfo = 
 {
 	name = "Timeleft on screen",
 	author = "FAQU"
 };
 
-public void OnClientPutInServer(int client)
+public void OnMapStart()
 {
-	if (!IsFakeClient(client))
-	{
-		Timers[client] = CreateTimer(1.00, Timer_Timeleft, client, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
-	}
+	CreateTimer(1.00, Timer_Timeleft, _, TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE);
 }
 
-public void OnClientDisconnect(int client)
-{
-	if (!IsFakeClient(client))
-	{
-		delete Timers[client];
-	}
-}
-
-public Action Timer_Timeleft(Handle timer, int client)
+public Action Timer_Timeleft(Handle timer)
 {
 	int iTimeleft;
 	GetMapTimeLeft(iTimeleft);
@@ -37,5 +24,12 @@ public Action Timer_Timeleft(Handle timer, int client)
 	FormatTime(sTimeleft, sizeof(sTimeleft), "%M:%S", iTimeleft);
 			
 	SetHudTextParams(-1.0, 0.06, 1.05, 255, 255, 255, 255, 0, 0.0, 0.0, 0.0);
-	ShowHudText(client, -1, "Timeleft: %s", sTimeleft);
+	
+	for (int i = 1; i <= MaxClients; i++)
+	{
+		if (IsClientConnected(i) && IsClientInGame(i) && !IsFakeClient(i))
+		{
+			ShowHudText(i, -1, "Timeleft: %s", sTimeleft);
+		}
+	}
 }
