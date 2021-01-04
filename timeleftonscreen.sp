@@ -4,6 +4,8 @@
 #pragma semicolon 1
 #pragma newdecls required
 
+Handle hTimer;
+
 public Plugin myinfo = 
 {
 	name = "Timeleft on screen",
@@ -12,7 +14,12 @@ public Plugin myinfo =
 
 public void OnMapStart()
 {
-	CreateTimer(1.00, Timer_Timeleft, _, TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE);
+	hTimer = CreateTimer(1.00, Timer_Timeleft, _, TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE);
+}
+
+public void OnMapEnd()
+{
+	delete hTimer;
 }
 
 public Action Timer_Timeleft(Handle timer)
