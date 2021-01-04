@@ -16,7 +16,7 @@ public void OnClientPutInServer(int client)
 {
 	if (!IsFakeClient(client))
 	{
-		Timers[client] = CreateTimer(1.00, Timer_Timeleft, client, TIMER_REPEAT);
+		Timers[client] = CreateTimer(1.00, Timer_Timeleft, client, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 	}
 }
 
