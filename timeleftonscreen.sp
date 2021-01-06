@@ -26,6 +26,11 @@ public Action Timer_Timeleft(Handle timer)
 {
 	int iTimeleft;
 	GetMapTimeLeft(iTimeleft);
+	
+	if (iTimeleft < 0) // prevents FormatTime error at the end of the map
+	{
+		return;
+	}
 			
 	char sTimeleft[32];
 	FormatTime(sTimeleft, sizeof(sTimeleft), "%M:%S", iTimeleft);
