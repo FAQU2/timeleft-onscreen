@@ -35,7 +35,7 @@ public Action Timer_Timeleft(Handle timer)
 	char sTimeleft[32];
 	FormatTime(sTimeleft, sizeof(sTimeleft), "%M:%S", iTimeleft);
 			
-	SetHudTextParams(-1.0, 0.06, 1.05, 255, 255, 255, 255, 0, 0.0, 0.0, 0.0);
+	SetHudTextParams(-1.0, 0.06, 1.10, 255, 255, 255, 255, 0, 0.0, 0.0, 0.0);
 	
 	for (int i = 1; i <= MaxClients; i++)
 	{
