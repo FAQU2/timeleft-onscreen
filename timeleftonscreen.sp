@@ -4,7 +4,8 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-Handle hTimer;
+Handle g_Sync;
+Handle g_Timer;
 
 public Plugin myinfo = 
 {
@@ -14,34 +15,43 @@ public Plugin myinfo =
 
 public void OnMapStart()
 {
-	hTimer = CreateTimer(1.00, Timer_Timeleft, _, TIMER_REPEAT);
+	g_Sync = CreateHudSynchronizer();
+	g_Timer = CreateTimer(1.00, Timer_Timeleft, _, TIMER_REPEAT);
 }
 
 public void OnMapEnd()
 {
-	delete hTimer;
+	delete g_Sync; 
+	delete g_Timer;
 }
 
 public Action Timer_Timeleft(Handle timer)
 {
-	int iTimeleft;
-	GetMapTimeLeft(iTimeleft);
+	static int time;
+	static char timeleft[32];
 	
-	if (iTimeleft < 0) // prevents FormatTime error at the end of the map
+	GetMapTimeLeft(time);
+	
+	if (time > -1)
 	{
-		return;
+		if (time > 3600)
+		{
+			FormatEx(timeleft, sizeof(timeleft), "Timeleft: %ih %02im", time / 3600, (time / 60) % 60);
+		}
+		else if (time < 60)
+		{
+			FormatEx(timeleft, sizeof(timeleft), "Timeleft: %02is", time);
+		}
+		else FormatEx(timeleft, sizeof(timeleft), "Timeleft: %im %02is", time / 60, time % 60);	
 	}
 			
-	char sTimeleft[32];
-	FormatTime(sTimeleft, sizeof(sTimeleft), "%M:%S", iTimeleft);
-			
-	SetHudTextParams(-1.0, 0.06, 1.10, 255, 255, 255, 255, 0, 0.0, 0.0, 0.0);
+	SetHudTextParams(-1.0, 0.06, 1.10, 255, 255, 255, 255, 0, 0.0, 0.0, 0.0);	
 	
 	for (int i = 1; i <= MaxClients; i++)
 	{
 		if (IsClientConnected(i) && IsClientInGame(i) && !IsFakeClient(i))
 		{
-			ShowHudText(i, -1, "Timeleft: %s", sTimeleft);
+			ShowSyncHudText(i, g_Sync, timeleft);
 		}
 	}
 }
