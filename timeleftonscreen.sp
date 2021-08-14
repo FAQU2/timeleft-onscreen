@@ -49,7 +49,7 @@ public Action Timer_Timeleft(Handle timer)
 	
 	for (int i = 1; i <= MaxClients; i++)
 	{
-		if (IsClientConnected(i) && IsClientInGame(i) && !IsFakeClient(i))
+		if (IsClientInGame(i) && !IsFakeClient(i))
 		{
 			ShowSyncHudText(i, g_Sync, timeleft);
 		}
